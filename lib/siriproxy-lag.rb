@@ -35,10 +35,6 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     request_completed #always complete your request! Otherwise the phone will "spin" at the user!
   end
 
-  listen_for /(.*)/i do
-    say query.strip
-  end
-
   #demonstrate state change
   #listen_for /siri proxy test state/i do
     #set_state :some_state #set a state... this is useful when you want to change how you respond after certain conditions are met!
