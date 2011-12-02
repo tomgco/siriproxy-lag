@@ -17,7 +17,7 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     file = "/var/lib/smokeping/External/VirginExchange.rrd"
     length = 1200
 
-    loss = RRD.fetch(file, -1200, "loss")
+    loss = RRD.fetch(file, "--start", -1200, "loss")
 
     say "Why not! #{loss}%" #say something to the user!
 
