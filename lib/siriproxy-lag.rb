@@ -36,15 +36,14 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     if(response =~ /yes/i) #process their response
       startTime = Time.now.to_i
       endTime = startTime - 1200
-      say "http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=#{startTime};end=#{endTime};target=External.VirginExchange;"
-      # object = SiriAddViews.new
-      # object.make_root(last_ref_id)
-      # answer = SiriAnswer.new("Lag Graph", [
-      #   SiriAnswerLine.new('image','http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=#{startTime};end=#{endTime};target=External.VirginExchange;'),
-      #   SiriAnswerLine.new("Currently experiencing #{loss}% packet loss")
-      # ])
-      # object.views << SiriAnswerSnippet.new([answer])
-      # send_object object
+      object = SiriAddViews.new
+      object.make_root(last_ref_id)
+      answer = SiriAnswer.new("Lag Graph", [
+        SiriAnswerLine.new('image','http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=#{startTime};end=#{endTime};target=External.VirginExchange;')
+      ])
+      object.views << SiriAnswerSnippet.new([answer])
+      send_object object
+      say "Currently experiencing #{loss}% packet loss"
     else
       say "Thanks, Bye!"
     end
