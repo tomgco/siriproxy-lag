@@ -40,7 +40,7 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
       object.make_root(last_ref_id)
       answer = SiriAnswer.new("Lag Graph", [
         SiriAnswerLine.new('image','http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=#{startTime};end=#{endTime};target=External.VirginExchange;'),
-        SiriAnswerLine.new('text', "Currently experiencing #{loss}% packet loss")
+        SiriAnswerLine.new("Currently experiencing #{loss}% packet loss")
       ])
       object.views << SiriAnswerSnippet.new([answer])
       send_object object
