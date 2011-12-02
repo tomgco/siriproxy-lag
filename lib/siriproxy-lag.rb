@@ -17,7 +17,7 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     file = "/var/lib/smokeping/External/VirginExchange.rrd"
     length = 1200
 
-    loss = RRD.fetch(file, "--start", -1200, "loss")
+    loss = RRD.graph("-", "DEF:a=\"{file}\":loss:AVERAGE", "CDEF:ploss=a,100,*,20,/", "PRINT:ploss:AVERAGE:\"Average:%.2lf %% avg\"", "--end", "now", "--start", "end-1200")
 
     say "Why not! #{loss}%" #say something to the user!
 
