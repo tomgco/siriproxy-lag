@@ -13,7 +13,7 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     #if you have custom configuration options, process them here!
   end
 
-  listen_for /why am i lagging|lacking/i do
+  listen_for /why am i (lagging|lacking)/i do
     file = "/var/lib/smokeping/External/VirginExchange.rrd"
     length = 1200
 
@@ -33,6 +33,10 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     say "#{lagAmount}" #say something to the user!
 
     request_completed #always complete your request! Otherwise the phone will "spin" at the user!
+  end
+
+  listen_for /(.*)/i do
+    say query.strip
   end
 
   #demonstrate state change
