@@ -19,7 +19,7 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
 
     loss = RRD.graph("-", "DEF:a=#{file}:loss:AVERAGE", "CDEF:ploss=a,100,*,20,/", "PRINT:ploss:AVERAGE:Average\\: %.2lf %% avg", "--end", "now", "--start", "end-1200")
 
-    say "Why not! #{loss[0]}" #say something to the user!
+    say "Why not! #{loss[0][0]}" #say something to the user!
 
     request_completed #always complete your request! Otherwise the phone will "spin" at the user!
   end
