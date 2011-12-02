@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{A Siri Proxy Plugin for 56 to see what the state of Lag is}
   s.description = %q{This is a plugin which shows the lag being experienced at 56}
 
-  s.rubyforge_project = "siriproxy-lag"
+  s.rubyforge_project = "lag"
 
   s.files         = `git ls-files 2> /dev/null`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/* 2> /dev/null`.split("\n")
