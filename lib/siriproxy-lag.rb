@@ -34,8 +34,8 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     response = ask " Would you like to see a graph?" #ask the user for something
 
     if(response =~ /yes/i) #process their response
-      startTime = Time.now.to_i
-      endTime = startTime - 1200
+      endTime = Time.now.to_i
+      startTime = endTime - 1200
       object = SiriAddViews.new
       object.make_root(last_ref_id)
       say "http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=#{startTime};end=#{endTime};target=External.VirginExchange;"
