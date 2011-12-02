@@ -13,7 +13,7 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     #if you have custom configuration options, process them here!
   end
 
-  listen_for /why am i (lagging|lacking)/i do
+  listen_for /why (am i|my) (lagging|lacking)/i do
     file = "/var/lib/smokeping/External/VirginExchange.rrd"
     length = 1200
 
@@ -31,6 +31,19 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     end
 
     say "#{lagAmount}" #say something to the user!
+    response = ask " Would you like to see a graph?" #ask the user for something
+
+    if(response =~ /yes/i) #process their response
+      object = SiriAddViews.new
+      object.make_root(last_ref_id)
+      answer = SiriAnswer.new("Lag Graph", [
+        SiriAnswerLine.new('logo','http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=1322836507;end=1322840995;target=External.VirginExchange;hierarchy='),
+      ])
+      object.views << SiriAnswerSnippet.new([answer])
+      send_object object
+    else
+      say "Thanks, Bye!"
+    end
 
     request_completed #always complete your request! Otherwise the phone will "spin" at the user!
   end
