@@ -35,7 +35,7 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
 
     if(response =~ /yes/i) #process their response
       startTime = Time.now.to_i
-      endTime = start - 1200
+      endTime = startTime - 1200
       object = SiriAddViews.new
       object.make_root(last_ref_id)
       answer = SiriAnswer.new("Lag Graph", [
