@@ -13,13 +13,24 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     #if you have custom configuration options, process them here!
   end
 
-  listen_for /why * lagging./i do
+  listen_for /why am i lagging|lacking/i do
     file = "/var/lib/smokeping/External/VirginExchange.rrd"
     length = 1200
 
-    loss = RRD.graph("-", "DEF:a=#{file}:loss:AVERAGE", "CDEF:ploss=a,100,*,20,/", "PRINT:ploss:AVERAGE:Average\\: %.2lf %% avg", "--end", "now", "--start", "end-1200")
+    loss = RRD.graph("-", "DEF:a=#{file}:loss:AVERAGE", "CDEF:ploss=a,100,*,20,/", "PRINT:ploss:AVERAGE:%.2lf %s", "--end", "now", "--start", "end-1200")[0][0]
+    lagAmount = "Nothing to report!"
+    case loss
+    when 1..5
+      lagAmount = "Little bit here."
+    when 5..20
+      lagAmount = "Might need to look into it."
+    when 20..50
+      lagAmount = "You cannot play now, too much packet loss!"
+    when 50..100
+      lagAmount = "Something is fucked up."
+    end
 
-    say "Why not! #{loss[0][0]}" #say something to the user!
+    say "#{lagAmount}" #say something to the user!
 
     request_completed #always complete your request! Otherwise the phone will "spin" at the user!
   end
