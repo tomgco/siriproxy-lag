@@ -13,7 +13,7 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     #if you have custom configuration options, process them here!
   end
 
-  listen_for /why (am i|is it) (lagging|lacking)/i do
+  listen_for /why (am i|my) (lagging|lacking)/i do
     file = "/var/lib/smokeping/External/VirginExchange.rrd"
     length = 1200
 
@@ -38,9 +38,10 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
       endTime = startTime - 1200
       object = SiriAddViews.new
       object.make_root(last_ref_id)
+      say "http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=#{startTime};end=#{endTime};target=External.VirginExchange;"
       answer = SiriAnswer.new("Lag Graph", [
-        SiriAnswerLine.new('image','http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=#{startTime};end=#{endTime};target=External.VirginExchange')
-      ])
+        SiriAnswerLine.new('image','http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=#{startTime};end=#{endTime};target=External.VirginExchange;')
+       ])
       object.views << SiriAnswerSnippet.new([answer])
       send_object object
     else
