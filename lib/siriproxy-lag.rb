@@ -1,5 +1,6 @@
 require 'cora'
 require 'siri_objects'
+require "RRD"
 
 #######
 #
@@ -7,12 +8,18 @@ require 'siri_objects'
 ######
 
 class SiriProxy::Plugin::Lag < SiriProxy::Plugin
+
   def initialize(config)
     #if you have custom configuration options, process them here!
   end
 
   listen_for /why am i lagging|lacking/i do
-    say "Why not!" #say something to the user!
+    file = "/var/lib/smokeping/External/VirginExchange.rrd"
+    length = 1200
+
+    loss = RRD.fetch(file, -1200, "loss")
+
+    say "Why not! #{loss}%" #say something to the user!
 
     request_completed #always complete your request! Otherwise the phone will "spin" at the user!
   end
