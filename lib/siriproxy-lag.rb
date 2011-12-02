@@ -21,7 +21,7 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     lagAmount = "Nothing to report!"
     case loss
     when 1..5
-      lagAmount = "Little bit here."
+      lagAmount = "Little bit of lag here."
     when 5..20
       lagAmount = "Might need to look into it."
     when 20..50
@@ -34,10 +34,13 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
     response = ask " Would you like to see a graph?" #ask the user for something
 
     if(response =~ /yes/i) #process their response
+      startTime = Time.now.to_i
+      endTime = start - 1200
       object = SiriAddViews.new
       object.make_root(last_ref_id)
       answer = SiriAnswer.new("Lag Graph", [
-        SiriAnswerLine.new('logo','http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=1322836507;end=1322840995;target=External.VirginExchange;hierarchy='),
+        SiriAnswerLine.new('image','http://10.0.0.144/cgi-bin/smokeping.cgi?displaymode=a;start=#{startTime};end=#{endTime};target=External.VirginExchange;')
+        SiriAnswerLine.new('image','http://10.0.0.144/cacti/graph_image.php?action=properties&local_graph_id=48&rra_id=5&graph_start=#{startTime}&graph_end=#{endTime}')
       ])
       object.views << SiriAnswerSnippet.new([answer])
       send_object object
@@ -47,55 +50,4 @@ class SiriProxy::Plugin::Lag < SiriProxy::Plugin
 
     request_completed #always complete your request! Otherwise the phone will "spin" at the user!
   end
-
-  #demonstrate state change
-  #listen_for /siri proxy test state/i do
-    #set_state :some_state #set a state... this is useful when you want to change how you respond after certain conditions are met!
-    #say "I set the state, try saying 'confirm state change'"
-
-    #request_completed #always complete your request! Otherwise the phone will "spin" at the user!
-  #end
-
-  #listen_for /confirm state change/i, within_state: :some_state do #this only gets processed if you're within the :some_state state!
-    #say "State change works fine!"
-    #set_state nil #clear out the state!
-
-    #request_completed #always complete your request! Otherwise the phone will "spin" at the user!
-  #end
-
-  #demonstrate asking a question
-  #listen_for /siri proxy test question/i do
-    #response = ask "Is this thing working?" #ask the user for something
-
-    #if(response =~ /yes/i) #process their response
-      #say "Great!" 
-    #else
-      #say "You could have just said 'yes'!"
-    #end
-
-    #request_completed #always complete your request! Otherwise the phone will "spin" at the user!
-  #end
-
-  ##demonstrate capturing data from the user (e.x. "Siri proxy number 15")
-  #listen_for /siri proxy number ([0-9,]*[0-9])/i do |number|
-    #say "Detected number: #{number}"
-
-    #request_completed #always complete your request! Otherwise the phone will "spin" at the user!
-  #end
-
-  ##demonstrate injection of more complex objects without shortcut methods.
-  #listen_for /test map/i do
-    #add_views = SiriAddViews.new
-    #add_views.make_root(last_ref_id)
-    #map_snippet = SiriMapItemSnippet.new
-    #map_snippet.items << SiriMapItem.new
-    #utterance = SiriAssistantUtteranceView.new("Testing map injection!")
-    #add_views.views << utterance
-    #add_views.views << map_snippet
-
-    ##you can also do "send_object object, target: :guzzoni" in order to send an object to guzzoni
-    #send_object add_views #send_object takes a hash or a SiriObject object
-
-    #request_completed #always complete your request! Otherwise the phone will "spin" at the user!
-  #end
 end
